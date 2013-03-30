@@ -18,9 +18,13 @@ type ZFifoFreering struct {
 
 func NewZFifoFreering() *ZFifoFreering {
 	q := &ZFifoFreering{}
-	empty := unsafe.Pointer(&Element{})
-	q.head = empty
-	q.tail = empty
+	// Creating an initial node
+	node := unsafe.Pointer(&node_t{nil, unsafe.Pointer(q)})
+
+	// Both head and tail point to the initial node
+	q.head = node
+	q.tail = node
+
 	q.length = 0
 	q.capacity = 1000
 	q.freelist = ring.New(q.capacity)
@@ -28,19 +32,19 @@ func NewZFifoFreering() *ZFifoFreering {
 	return q
 }
 
-func (q *ZFifoFreering) newElem() *Element {
+func (q *ZFifoFreering) newNode() *node_t {
 	q.m.Lock()
 	if q.length == 0 {
 		q.m.Unlock()
-		return &Element{}
+		return &node_t{}
 	}
-	value := (q.freelist.Value).(*Element)
+	value, _ := (q.freelist.Value).(*node_t)
 	q.freelist = q.freelist.Prev()
 	q.m.Unlock()
 	return value
 }
 
-func (q *ZFifoFreering) freeElem(elem *Element) {
+func (q *ZFifoFreering) freeNode(elem *node_t) {
 	q.m.Lock()
 	if q.length >= q.capacity {
 		q.m.Unlock()
@@ -51,58 +55,55 @@ func (q *ZFifoFreering) freeElem(elem *Element) {
 	q.m.Unlock()
 }
 
+// Enqueue inserts the value at the tail of the queue
 func (q *ZFifoFreering) Enqueue(value interface{}) {
-	// Allocate a new node
-	var tail, next, node unsafe.Pointer
-	element := q.newElem()
-	element.Value = value
-	element.Next = nil
-	node = unsafe.Pointer(element)
-
+	node := q.newNode()
+	//new(node_t) // Allocate a new node from the free list
+	node.value = value // Copy enqueued value into node
+	node.next = unsafe.Pointer(q)
 	for { // Keep trying until Enqueue is done
-		tail = q.tail                  // Read Tail.ptr and Tail.count together
-		next = ((*Element)(tail)).Next // Read next ptr and count fields together
-		if tail == q.tail {            // Are tail and next consistent?
+		tail := atomic.LoadPointer(&q.tail)
 
-			if next == nil { // Was Tail pointing to the last node?
-				// Try to link node at the end of the linked list
-				if atomic.CompareAndSwapPointer(&((*Element)(tail)).Next, next, node) {
-					break // Enqueue is done.  Exit loop
-				}
-			} else { // Tail was not pointing to the last node
-				atomic.CompareAndSwapPointer(&q.tail, tail, next) // Try to swing Tail to the next node
-			}
+		// Try to link in new node
+		if atomic.CompareAndSwapPointer(&(*node_t)(tail).next, unsafe.Pointer(q), unsafe.Pointer(node)) {
+			// Enqueue is done.  Try to swing tail to the inserted node.
+			atomic.CompareAndSwapPointer(&q.tail, tail, unsafe.Pointer(node))
+			return
 		}
+
+		// Try to swing tail to the next node as the tail was not pointing to the last node
+		atomic.CompareAndSwapPointer(&q.tail, tail, (*node_t)(tail).next)
 	}
-	// Enqueue is done.  Try to swing Tail to the inserted node
-	atomic.CompareAndSwapPointer(&q.tail, tail, node)
 }
 
+// Dequeue returns the value at the head of the queue and true, or if the queue is empty, it returns a nil value and false
 func (q *ZFifoFreering) Dequeue() (value interface{}, ok bool) {
-	var head, tail, next unsafe.Pointer
 	for {
-		head = q.head                  // Read Head
-		tail = q.tail                  // Read Tail
-		next = ((*Element)(head)).Next // Read Head.ptr->next
-		if head == q.head {            // Are head, tail, and next consistent?
-			if head == tail {
-				if next == nil {
-					return nil, false // Queue is empty, couldn't dequeue
-				}
-				// Tail is falling behind.  Try to advance it
-				atomic.CompareAndSwapPointer(&q.tail, tail, next)
-			} else {
-				// Read value before CAS
-				// Otherwise, another dequeue might free the next node
-				value = ((*Element)(next)).Value
-				// Try to swing Head to the next node
-				if atomic.CompareAndSwapPointer(&q.head, head, next) {
-					break // Dequeue is done.  Exit loop
-				}
+		head := atomic.LoadPointer(&q.head)               // Read head pointer
+		tail := atomic.LoadPointer(&q.tail)               // Read tail pointer
+		next := atomic.LoadPointer(&(*node_t)(head).next) // Read head.next
+		if head != q.head {                               // Check head, tail, and next consistency
+			continue // Not consistent. Try again
+		}
+
+		if head == tail { // Is queue empty or tail failing behind
+			if next == unsafe.Pointer(q) { // Is queue empty?
+				return
 			}
+			// Try to swing tail to the next node as the tail was not pointing to the last node
+			atomic.CompareAndSwapPointer(&q.tail, tail, next)
+		} else {
+			// Read value before CAS
+			// Otherwise, another dequeue might free the next node
+			value = (*node_t)(next).value
+			// Try to swing Head to the next node
+			if atomic.CompareAndSwapPointer(&q.head, head, next) {
+				ok = true
+				q.freeNode((*node_t)(head))
+				return
+			}
+			value = nil
 		}
 	}
-	// It is safe now to free the old node
-	q.freeElem((*Element)(next))
-	return value, true
+	return // Dummy return
 }

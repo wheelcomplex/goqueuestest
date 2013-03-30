@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	testItemCount = 100
+	testItemCount = 1000
 	testTimeout   = 10 * time.Second
 )
 
@@ -77,6 +77,7 @@ func lifoTest(t *testing.T, q Queue) {
 
 func fifoParallelTest(t *testing.T, q Queue) {
 	done := timeout(t)
+
 	testRoutines := runtime.NumCPU()
 	N := testItemCount / testRoutines
 	wg := &sync.WaitGroup{}
@@ -87,6 +88,7 @@ func fifoParallelTest(t *testing.T, q Queue) {
 			for i := 0; i < N; i += 1 {
 				q.Enqueue(i)
 			}
+
 			for i := 0; i < N; i += 1 {
 				_, ok := q.Dequeue()
 				if !ok {
@@ -137,7 +139,7 @@ func queueBench(b *testing.B, q Queue) {
 }
 
 func queueBenchParallel(b *testing.B, q Queue) {
-	testRoutines := runtime.NumCPU()
+	testRoutines := runtime.GOMAXPROCS(-1)
 	wg := &sync.WaitGroup{}
 	for k := 0; k < testRoutines; k += 1 {
 		wg.Add(1)

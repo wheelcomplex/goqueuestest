@@ -1,5 +1,5 @@
 // implements fifo using a channel
-package zq
+package goqueuestest
 
 type CFifo struct {
 	ch chan interface{}

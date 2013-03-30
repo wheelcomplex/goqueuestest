@@ -1,5 +1,5 @@
 // implements locking queues, using list and channel
-package zq
+package goqueuestest
 
 import (
 	"container/list"

@@ -1,4 +1,4 @@
-package zq
+package goqueuestest
 
 import (
 	"sync/atomic"

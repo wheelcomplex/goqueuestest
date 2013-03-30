@@ -30,7 +30,7 @@ func (q *ZFifoFreechan) newElem() *Element {
 
 func (q *ZFifoFreechan) freeElem(elem *Element) {
 	select {
-	case q.freelist <- elem:
+	case q.freelist<- elem:
 	default:
 	}
 }

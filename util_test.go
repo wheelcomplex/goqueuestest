@@ -12,8 +12,6 @@ const (
 	testTimeout   = 10 * time.Second
 )
 
-var testRoutines int = runtime.GOMAXPROCS(-1)
-
 func timeout(t *testing.T) chan int {
 	done := make(chan int)
 	go func() {
@@ -79,6 +77,7 @@ func lifoTest(t *testing.T, q Queue) {
 
 func fifoParallelTest(t *testing.T, q Queue) {
 	done := timeout(t)
+	testRoutines := runtime.NumCPU()
 	N := testItemCount / testRoutines
 	wg := &sync.WaitGroup{}
 
@@ -104,9 +103,10 @@ func fifoParallelTest(t *testing.T, q Queue) {
 
 func lifoParallelTest(t *testing.T, q Queue) {
 	done := timeout(t)
+	
+	testRoutines := runtime.NumCPU()
 	N := testItemCount / testRoutines
 	wg := &sync.WaitGroup{}
-
 	for k := 0; k < testRoutines; k += 1 {
 		wg.Add(1)
 		go func() {
@@ -137,15 +137,15 @@ func queueBench(b *testing.B, q Queue) {
 }
 
 func queueBenchParallel(b *testing.B, q Queue) {
-	N := b.N / testRoutines
+	testRoutines := runtime.NumCPU()
 	wg := &sync.WaitGroup{}
 	for k := 0; k < testRoutines; k += 1 {
 		wg.Add(1)
 		go func() {
-			for i := 0; i < N; i += 1 {
+			for i := 0; i < b.N; i += 1 {
 				q.Enqueue(i)
 			}
-			for i := 0; i < N; i += 1 {
+			for i := 0; i < b.N; i += 1 {
 				q.Dequeue()
 			}
 			wg.Done()

@@ -122,3 +122,30 @@ func BenchmarkLockfreeFifoFreering(b *testing.B) {
 func BenchmarkLockfreeFifoFreeringParallel(b *testing.B) {
 	queueBenchParallel(b, NewZFifoFreering())
 }
+
+
+func TestRingLifo(t *testing.T) {
+	lifoTest(t, NewRLifo())
+	lifoParallelTest(t, NewRLifo())
+}
+
+func BenchmarkRingLifo(b *testing.B) {
+	queueBench(b, NewRLifo())
+}
+
+func BenchmarkRingLifoParallel(b *testing.B) {
+	queueBenchParallel(b, NewRLifo())
+}
+
+func TestRingFifo(t *testing.T) {
+	fifoTest(t, NewRFifo())
+	fifoParallelTest(t, NewRFifo())
+}
+
+func BenchmarkRingFifo(b *testing.B) {
+	queueBench(b, NewRFifo())
+}
+
+func BenchmarkRingFifoParallel(b *testing.B) {
+	queueBenchParallel(b, NewRFifo())
+}

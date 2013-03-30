@@ -140,14 +140,15 @@ func queueBench(b *testing.B, q Queue) {
 
 func queueBenchParallel(b *testing.B, q Queue) {
 	testRoutines := runtime.GOMAXPROCS(-1)
+	N := b.N / testRoutines
 	wg := &sync.WaitGroup{}
 	for k := 0; k < testRoutines; k += 1 {
 		wg.Add(1)
 		go func() {
-			for i := 0; i < b.N; i += 1 {
+			for i := 0; i < N; i += 1 {
 				q.Enqueue(i)
 			}
-			for i := 0; i < b.N; i += 1 {
+			for i := 0; i < N; i += 1 {
 				q.Dequeue()
 			}
 			wg.Done()

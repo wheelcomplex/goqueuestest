@@ -5,8 +5,7 @@ import (
 	"unsafe"
 )
 
-// based on http://www.cs.cmu.edu/~410-s05/lectures/L31_LockFree.pdf
-// Warning! Suffers from ABA problem
+// Simplistic lock-free stack, suffers from ABA
 
 type ZLifo struct {
 	head unsafe.Pointer

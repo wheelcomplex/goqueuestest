@@ -1,19 +1,19 @@
 package goqueuestest
 
 import (
-	"sync/atomic"
 	"container/ring"
-	"unsafe"
 	"sync"
+	"sync/atomic"
+	"unsafe"
 )
 
 type ZFifoFreering struct {
-	head unsafe.Pointer
-	tail unsafe.Pointer
+	head     unsafe.Pointer
+	tail     unsafe.Pointer
 	freelist *ring.Ring
-	length int
+	length   int
 	capacity int
-	m sync.Mutex
+	m        sync.Mutex
 }
 
 func NewZFifoFreering() *ZFifoFreering {
@@ -63,7 +63,7 @@ func (q *ZFifoFreering) Enqueue(value interface{}) {
 		tail = q.tail                  // Read Tail.ptr and Tail.count together
 		next = ((*Element)(tail)).Next // Read next ptr and count fields together
 		if tail == q.tail {            // Are tail and next consistent?
-			
+
 			if next == nil { // Was Tail pointing to the last node?
 				// Try to link node at the end of the linked list
 				if atomic.CompareAndSwapPointer(&((*Element)(tail)).Next, next, node) {

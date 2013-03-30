@@ -6,8 +6,8 @@ import (
 )
 
 type ZFifoFreechan struct {
-	head unsafe.Pointer
-	tail unsafe.Pointer
+	head     unsafe.Pointer
+	tail     unsafe.Pointer
 	freelist chan *Element
 }
 
@@ -22,7 +22,8 @@ func NewZFifoFreechan() *ZFifoFreechan {
 
 func (q *ZFifoFreechan) newElem() *Element {
 	select {
-	case element := <-q.freelist: return element
+	case element := <-q.freelist:
+		return element
 	default:
 		return &Element{}
 	}
@@ -30,7 +31,7 @@ func (q *ZFifoFreechan) newElem() *Element {
 
 func (q *ZFifoFreechan) freeElem(elem *Element) {
 	select {
-	case q.freelist<- elem:
+	case q.freelist <- elem:
 	default:
 	}
 }
@@ -47,7 +48,7 @@ func (q *ZFifoFreechan) Enqueue(value interface{}) {
 		tail = q.tail                  // Read Tail.ptr and Tail.count together
 		next = ((*Element)(tail)).Next // Read next ptr and count fields together
 		if tail == q.tail {            // Are tail and next consistent?
-			
+
 			if next == nil { // Was Tail pointing to the last node?
 				// Try to link node at the end of the linked list
 				if atomic.CompareAndSwapPointer(&((*Element)(tail)).Next, next, node) {

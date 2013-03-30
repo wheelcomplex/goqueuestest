@@ -30,7 +30,7 @@ func (q *ZFifo) Enqueue(value interface{}) {
 		tail = q.tail                  // Read Tail.ptr and Tail.count together
 		next = ((*Element)(tail)).Next // Read next ptr and count fields together
 		if tail == q.tail {            // Are tail and next consistent?
-			
+
 			if next == nil { // Was Tail pointing to the last node?
 				// Try to link node at the end of the linked list
 				if atomic.CompareAndSwapPointer(&((*Element)(tail)).Next, next, node) {

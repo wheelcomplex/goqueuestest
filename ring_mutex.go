@@ -8,10 +8,10 @@ import (
 const growBy = 1000
 
 type RLifo struct {
-	head *ring.Ring // last enqueued value
-	length int
+	head     *ring.Ring // last enqueued value
+	length   int
 	capacity int
-	m sync.Mutex
+	m        sync.Mutex
 }
 
 func NewRLifo() *RLifo {
@@ -49,11 +49,11 @@ func (q *RLifo) Dequeue() (value interface{}, ok bool) {
 }
 
 type RFifo struct {
-	head *ring.Ring // last enqueued value
-	tail *ring.Ring // last dequeued value
-	length int
+	head     *ring.Ring // last enqueued value
+	tail     *ring.Ring // last dequeued value
+	length   int
 	capacity int
-	m sync.Mutex
+	m        sync.Mutex
 }
 
 func NewRFifo() *RFifo {

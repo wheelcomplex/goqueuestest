@@ -103,7 +103,7 @@ func fifoParallelTest(t *testing.T, q Queue) {
 
 func lifoParallelTest(t *testing.T, q Queue) {
 	done := timeout(t)
-	
+
 	testRoutines := runtime.NumCPU()
 	N := testItemCount / testRoutines
 	wg := &sync.WaitGroup{}

@@ -82,7 +82,6 @@ func BenchmarkLockfreeFifoParallel(b *testing.B) {
 	queueBenchParallel(b, NewZFifo())
 }
 
-
 func TestZLifo(t *testing.T) {
 	lifoTest(t, NewZLifo())
 	lifoParallelTest(t, NewZLifo())
@@ -95,7 +94,6 @@ func BenchmarkLockfreeLifo(b *testing.B) {
 func BenchmarkLockfreeLifoParallel(b *testing.B) {
 	queueBenchParallel(b, NewZLifo())
 }
-
 
 func TestZFifoFreechan(t *testing.T) {
 	fifoTest(t, NewZFifoFreechan())
@@ -122,7 +120,6 @@ func BenchmarkLockfreeFifoFreering(b *testing.B) {
 func BenchmarkLockfreeFifoFreeringParallel(b *testing.B) {
 	queueBenchParallel(b, NewZFifoFreering())
 }
-
 
 func TestRingLifo(t *testing.T) {
 	lifoTest(t, NewRLifo())

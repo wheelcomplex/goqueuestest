@@ -10,23 +10,23 @@ func TestCFifo(t *testing.T) {
 }
 
 func BenchmarkCFifoSing(b *testing.B) {
-	queueBenchSing(b, NewChanFifo(b.N))
+	queueBenchSing(b, NewChanFifo(benchIterations))
 }
 
 func BenchmarkCFifoANRN(b *testing.B) {
-	queueBenchANRN(b, NewChanFifo(b.N))
+	queueBenchANRN(b, NewChanFifo(benchIterations))
 }
 
 func BenchmarkCFifoA1R1(b *testing.B) {
-	queueBenchA1R1(b, NewChanFifo(b.N))
+	queueBenchA1R1(b, NewChanFifo(benchIterations))
 }
 
 func BenchmarkCFifoA2R1(b *testing.B) {
-	queueBenchA2R1(b, NewChanFifo(b.N))
+	queueBenchA2R1(b, NewChanFifo(benchIterations))
 }
 
 func BenchmarkCFifoA1R2(b *testing.B) {
-	queueBenchA1R2(b, NewChanFifo(b.N))
+	queueBenchA1R2(b, NewChanFifo(benchIterations))
 }
 
 func TestZLifo(t *testing.T) {

@@ -9,6 +9,8 @@ import (
 
 const (
 	testItemCount = 1000
+	useFixedBench = false
+	benchIterations = 5000000
 	testTimeout   = 10 * time.Second
 )
 
@@ -119,6 +121,9 @@ func queueP2Test(t *testing.T, q Queue) {
 }
 
 func queueBenchSing(b *testing.B, q Queue) {
+	if useFixedBench {
+		b.N = benchIterations
+	}
 	for i := 0; i < b.N; i += 1 {
 		q.Enqueue(i)
 	}
@@ -128,6 +133,9 @@ func queueBenchSing(b *testing.B, q Queue) {
 }
 
 func runParallelBench(b *testing.B, test func(int)) {
+	if useFixedBench {
+		b.N = benchIterations
+	}
 	cpus := runtime.GOMAXPROCS(-1)
 	N := b.N / cpus
 	wg := &sync.WaitGroup{}

@@ -56,12 +56,12 @@ func Benchmark{{.Name}}P2(b *testing.B) {
 
 var queues = map[string]string {
 	"CFifo" : "NewChanFifo",
-	"LcFifo" : "NewListCFifo",
 	"LcLifo" : "NewListCLifo",
-	"LmFifo" : "NewListFifo",
+	"LcFifo" : "NewListCFifo",
 	"LmLifo" : "NewListLifo",
-	"ZFifo" : "NewZFifo",
+	"LmFifo" : "NewListFifo",
 	"ZLifo" : "NewZLifo",
+	"ZFifo" : "NewZFifo",	
 	"ZcFifo" : "NewZFifoFreechan",
 	"ZrFifo" : "NewZFifoFreering",
 	"RmLifo" : "NewRLifo",

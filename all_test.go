@@ -30,12 +30,6 @@ func TestListMutexLifo(t *testing.T) {
 	queueP2Test(t, NewListLifo())
 }
 
-func TestCFifo(t *testing.T) {
-	fifoTest(t, NewChanFifo(testItemCount))
-	queuePTest(t, NewChanFifo(testItemCount))
-	queueP2Test(t, NewChanFifo(testItemCount))
-}
-
 func TestZFifo(t *testing.T) {
 	fifoTest(t, NewZFifo())
 	queuePTest(t, NewZFifo())
@@ -102,9 +96,6 @@ func BenchmarkListMutexLifo(b *testing.B) {
 	queueBench(b, NewListLifo())
 }
 
-func BenchmarkChanFifo(b *testing.B) {
-	queueBench(b, NewChanFifo(b.N))
-}
 
 func BenchmarkLockfreeFifo(b *testing.B) {
 	queueBench(b, NewZFifo())
@@ -140,10 +131,6 @@ func BenchmarkSliceFifo(b *testing.B) {
 
 // PARALLEL BENCHMARK
 
-func BenchmarkListChanFifoP(b *testing.B) {
-	queueBenchP(b, NewListCFifo())
-}
-
 func BenchmarkListChanLifoP(b *testing.B) {
 	queueBenchP(b, NewListCLifo())
 }
@@ -154,10 +141,6 @@ func BenchmarkListMutexFifoP(b *testing.B) {
 
 func BenchmarkListMutexLifoP(b *testing.B) {
 	queueBenchP(b, NewListLifo())
-}
-
-func BenchmarkChanFifoP(b *testing.B) {
-	queueBenchP(b, NewChanFifo(b.N))
 }
 
 func BenchmarkLockfreeFifoP(b *testing.B) {

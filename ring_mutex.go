@@ -66,7 +66,7 @@ func NewRFifo() *RFifo {
 
 func (q *RFifo) Enqueue(value interface{}) {
 	q.m.Lock()
-	if q.length >= q.capacity {
+	if q.length + 1 >= q.capacity {
 		q.capacity = q.capacity + growBy
 		q.head.Link(ring.New(growBy))
 	}

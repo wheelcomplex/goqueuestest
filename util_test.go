@@ -159,7 +159,6 @@ func queueBenchP(b *testing.B, q Queue) {
 
 
 func queueBenchP2(b *testing.B, q Queue) {
-	done := timeout()
 	testRoutines := runtime.GOMAXPROCS(-1)
 	N := b.N / testRoutines
 	wg := &sync.WaitGroup{}
@@ -174,5 +173,4 @@ func queueBenchP2(b *testing.B, q Queue) {
 		}()
 	}
 	wg.Wait()
-	done <- 1
 }

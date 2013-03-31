@@ -75,57 +75,47 @@ func lifoTest(t *testing.T, q Queue) {
 	done <- 1
 }
 
-func queuePTest(t *testing.T, q Queue) {
+func runParallelTest(t *testing.T, test func(int)) {
 	done := timeout()
-
-	testRoutines := runtime.NumCPU()
-	N := testItemCount / testRoutines
+	cpus := 4
+	N := testItemCount / cpus
 	wg := &sync.WaitGroup{}
-
-	for k := 0; k < testRoutines; k += 1 {
+	for i := 0; i < cpus; i += 1 {
 		wg.Add(1)
-		go func() {
-			for i := 0; i < N; i += 1 {
-				q.Enqueue(i)
-			}
-
-			for i := 0; i < N; i += 1 {
-				_, ok := q.Dequeue()
-				if !ok {
-					t.Fatalf("Was unable to get value")
-				}
-			}
+		go func(){
+			test(N)
 			wg.Done()
 		}()
 	}
-
 	wg.Wait()
 	done <- 1
 }
 
-func queueP2Test(t *testing.T, q Queue) {
-	done := timeout()
+func queuePTest(t *testing.T, q Queue) {
+	runParallelTest(t, func(N int){
+		for i := 0; i < N; i += 1 {
+			q.Enqueue(i)
+		}
 
-	testRoutines := runtime.NumCPU()
-	N := testItemCount / testRoutines
-	wg := &sync.WaitGroup{}
-
-	for k := 0; k < testRoutines; k += 1 {
-		wg.Add(1)
-		go func() {
-			for i := 0; i < N; i += 1 {
-				q.Enqueue(i)
-				_, ok := q.Dequeue()
-				if !ok {
-					t.Fatalf("Was unable to get value")
-				}
+		for i := 0; i < N; i += 1 {
+			_, ok := q.Dequeue()
+			if !ok {
+				t.Fatalf("Was unable to get value")
 			}
-			wg.Done()
-		}()
-	}
+		}
+	})
+}
 
-	wg.Wait()
-	done <- 1
+func queueP2Test(t *testing.T, q Queue) {
+	runParallelTest(t, func(N int){
+		for i := 0; i < N; i += 1 {
+			q.Enqueue(i)
+			_, ok := q.Dequeue()
+			if !ok {
+				t.Fatalf("Was unable to get value")
+			}
+		}
+	})
 }
 
 func queueBenchSing(b *testing.B, q Queue) {
@@ -137,82 +127,64 @@ func queueBenchSing(b *testing.B, q Queue) {
 	}
 }
 
-func queueBenchANRN(b *testing.B, q Queue) {
-	testRoutines := runtime.GOMAXPROCS(-1)
-	N := b.N / testRoutines
+func runParallelBench(b *testing.B, test func(int)) {
+	cpus := runtime.GOMAXPROCS(-1)
+	N := b.N / cpus
 	wg := &sync.WaitGroup{}
-	for k := 0; k < testRoutines; k += 1 {
+	for i := 0; i < cpus; i += 1 {
 		wg.Add(1)
-		go func() {
-			for i := 0; i < N; i += 1 {
-				q.Enqueue(i)
-			}
-			for i := 0; i < N; i += 1 {
-				q.Dequeue()
-			}
+		go func(){
+			test(N)
 			wg.Done()
 		}()
 	}
 	wg.Wait()
+}
+
+func queueBenchANRN(b *testing.B, q Queue) {
+	runParallelBench(b, func(N int){
+		for i := 0; i < N; i += 1 {
+			q.Enqueue(i)
+		}
+		for i := 0; i < N; i += 1 {
+			q.Dequeue()
+		}
+	})
 }
 
 func queueBenchA1R1(b *testing.B, q Queue) {
-	testRoutines := runtime.GOMAXPROCS(-1)
-	N := b.N / testRoutines
-	wg := &sync.WaitGroup{}
-	for k := 0; k < testRoutines; k += 1 {
-		wg.Add(1)
-		go func() {
-			for i := 0; i < N; i += 1 {
-				q.Enqueue(i)
-				q.Dequeue()
-			}
-			wg.Done()
-		}()
-	}
-	wg.Wait()
+	runParallelBench(b, func(N int){
+		for i := 0; i < N; i += 1 {
+			q.Enqueue(i)
+			q.Dequeue()
+		}
+	})
 }
 
 func queueBenchA2R1(b *testing.B, q Queue) {
-	testRoutines := runtime.GOMAXPROCS(-1)
-	N := b.N / testRoutines
-	N = N / 2
-	wg := &sync.WaitGroup{}
-	for k := 0; k < testRoutines; k += 1 {
-		wg.Add(1)
-		go func() {
-			for i := 0; i < N; i += 1 {
-				q.Enqueue(i)
-				q.Enqueue(i)
-				q.Dequeue()
-			}
-			for i := 0; i < N; i += 1 {
-				q.Dequeue()
-			}
-			wg.Done()
-		}()
-	}
-	wg.Wait()
+	runParallelBench(b, func(N int){
+		N2 := N / 2
+		for i := 0; i < N2; i += 1 {
+			q.Enqueue(i)
+			q.Enqueue(i)
+			q.Dequeue()
+		}
+		for i := 0; i < N2; i += 1 {
+			q.Dequeue()
+		}
+	})
 }
 
 func queueBenchA1R2(b *testing.B, q Queue) {
-	testRoutines := runtime.GOMAXPROCS(-1)
-	N := b.N / testRoutines
-	N = N / 2
-	wg := &sync.WaitGroup{}
-	for k := 0; k < testRoutines; k += 1 {
-		wg.Add(1)
-		go func() {
-			for i := 0; i < N; i += 1 {
-				q.Enqueue(i)
-			}
-			for i := 0; i < N; i += 1 {
-				q.Enqueue(i)
-				q.Dequeue()
-				q.Dequeue()
-			}
-			wg.Done()
-		}()
-	}
-	wg.Wait()
+	runParallelBench(b, func(N int){
+		N2 := N / 2
+		for i := 0; i < N2; i += 1 {
+			q.Enqueue(i)
+		}
+		for i := 0; i < N2; i += 1 {
+			q.Enqueue(i)
+			q.Dequeue()
+			q.Dequeue()
+		}
+	})	
 }

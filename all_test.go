@@ -84,7 +84,7 @@ func TestZcFifo(t *testing.T) {
 	queuePTest(t, NewZFifoFreechan())
 	queueP2Test(t, NewZFifoFreechan())
 }
-
+/*
 func BenchmarkZcFifoSing(b *testing.B) {
 	queueBenchSing(b, NewZFifoFreechan())
 }
@@ -102,7 +102,7 @@ func BenchmarkZcFifoA2R1(b *testing.B) {
 }
 func BenchmarkZcFifoA1R2(b *testing.B) {
 	queueBenchA1R2(b, NewZFifoFreechan())
-}
+}*/
 
 func TestZrFifo(t *testing.T) {
 	fifoTest(t, NewZFifoFreering())

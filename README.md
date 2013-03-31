@@ -1,7 +1,7 @@
 Go Queues Test
 ==
 
-Performance test of different queue implementations
+Performance test of different concurrent queue implementations
 
 --
 
@@ -28,18 +28,22 @@ Available Structure:
 Current performance:
 
                 1.      2.      3.      4.      5.
-    CFifo       97      93      88      92      89
-    LcLifo      266     325     377     339     334
-    LcFifo      267     327     401     350     335
-    LmLifo      152     475     517     516     477
-    LmFifo      151     498     492     509     499
-    ZLifo       102     154     106     132     112
-    ZFifo       126     144     128     137     134
-    ZrFifo      169     358     332     375     334
-    RmLifo      145     397     293     336     353
-    RmFifo      146     392     297     329     343
-    SmLifo      99      307     313     309     311
-    SmFifo      107     327     312     331     324
+    CFifo       92      92      87      88      88
+    ZLifo       104     179     105     119     110
+    ZFifo       129     160     132     147     137
+    ScLifo      198     216     225     202     201
+    ScFifo      206     223     195     238     207
+    ZrFifo      171     334     353     310     377
+    SmLifo      91      311     315     317     325
+    SmFifo      99      322     313     330     325
+    RcLifo      250     263     171     220     220
+    RcFifo      253     260     174     221     221
+    RmLifo      148     386     291     349     345
+    RmFifo      147     388     303     334     348
+    LcLifo      267     321     412     338     330
+    LcFifo      267     323     368     355     336
+    LmLifo      153     634     451     486     483
+    LmFifo      153     636     481     469     537
 
 Tests:
 
@@ -49,4 +53,6 @@ Tests:
 4. N/2 times (Add 2, Remove 1), Remove N/2
 5. Add N/2, N/2 times (Add 1, Remove 2)
 
-ZcFifo was excluded due to crashes and infinite loops.
+ZcFifo was excluded due to crash.
+
+General recommendation use chan if it suits otherwise use slice + "chan as a lock".

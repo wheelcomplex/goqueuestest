@@ -18,6 +18,6 @@ func (q *CFifo) Dequeue() (value interface{}, ok bool) {
 	case value, ok = <-q.ch:
 		return value, ok
 	default:
-		return nil, false
 	}
+	return nil, false
 }

@@ -31,8 +31,8 @@ func (q *ZFifoFreechan) newNode() *lfNode {
 	case element := <-q.freelist:
 		return element
 	default:
-		return &lfNode{}
 	}
+	return &lfNode{}
 }
 
 func (q *ZFifoFreechan) freeNode(elem *lfNode) {

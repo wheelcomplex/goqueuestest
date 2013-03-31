@@ -13,3 +13,5 @@ type Element struct {
 	Value interface{}
 	Next  unsafe.Pointer
 }
+
+const growBy = 1000

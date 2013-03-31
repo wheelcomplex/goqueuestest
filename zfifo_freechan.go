@@ -39,7 +39,7 @@ func (q *ZFifoFreechan) freeNode(elem *node_t) {
 	select {
 	case q.freelist <- elem:
 	default:
-	}
+	} 
 }
 
 // Enqueue inserts the value at the tail of the queue

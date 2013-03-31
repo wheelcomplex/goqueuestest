@@ -5,8 +5,6 @@ import (
 	"sync"
 )
 
-const growBy = 1000
-
 type RLifo struct {
 	head     *ring.Ring // last enqueued value
 	length   int

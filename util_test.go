@@ -12,7 +12,7 @@ const (
 	testTimeout   = 10 * time.Second
 )
 
-func timeout(t *testing.T) chan int {
+func timeout() chan int {
 	done := make(chan int)
 	go func() {
 		select {
@@ -35,7 +35,7 @@ func testReturn(t *testing.T, got interface{}, wasOk bool, expected interface{},
 }
 
 func fifoTest(t *testing.T, q Queue) {
-	done := timeout(t)
+	done := timeout()
 
 	N := testItemCount
 	for i := 0; i < N; i += 1 {
@@ -56,7 +56,7 @@ func fifoTest(t *testing.T, q Queue) {
 }
 
 func lifoTest(t *testing.T, q Queue) {
-	done := timeout(t)
+	done := timeout()
 
 	N := testItemCount
 	for i := 0; i < N; i += 1 {
@@ -75,8 +75,8 @@ func lifoTest(t *testing.T, q Queue) {
 	done <- 1
 }
 
-func fifoParallelTest(t *testing.T, q Queue) {
-	done := timeout(t)
+func queuePTest(t *testing.T, q Queue) {
+	done := timeout()
 
 	testRoutines := runtime.NumCPU()
 	N := testItemCount / testRoutines
@@ -103,19 +103,18 @@ func fifoParallelTest(t *testing.T, q Queue) {
 	done <- 1
 }
 
-func lifoParallelTest(t *testing.T, q Queue) {
-	done := timeout(t)
+func queueP2Test(t *testing.T, q Queue) {
+	done := timeout()
 
 	testRoutines := runtime.NumCPU()
 	N := testItemCount / testRoutines
 	wg := &sync.WaitGroup{}
+
 	for k := 0; k < testRoutines; k += 1 {
 		wg.Add(1)
 		go func() {
 			for i := 0; i < N; i += 1 {
 				q.Enqueue(i)
-			}
-			for i := 0; i < N; i += 1 {
 				_, ok := q.Dequeue()
 				if !ok {
 					t.Fatalf("Was unable to get value")
@@ -128,6 +127,7 @@ func lifoParallelTest(t *testing.T, q Queue) {
 	wg.Wait()
 	done <- 1
 }
+
 
 func queueBench(b *testing.B, q Queue) {
 	for i := 0; i < b.N; i += 1 {
@@ -138,7 +138,7 @@ func queueBench(b *testing.B, q Queue) {
 	}
 }
 
-func queueBenchParallel(b *testing.B, q Queue) {
+func queueBenchP(b *testing.B, q Queue) {
 	testRoutines := runtime.GOMAXPROCS(-1)
 	N := b.N / testRoutines
 	wg := &sync.WaitGroup{}
@@ -155,4 +155,24 @@ func queueBenchParallel(b *testing.B, q Queue) {
 		}()
 	}
 	wg.Wait()
+}
+
+
+func queueBenchP2(b *testing.B, q Queue) {
+	done := timeout()
+	testRoutines := runtime.GOMAXPROCS(-1)
+	N := b.N / testRoutines
+	wg := &sync.WaitGroup{}
+	for k := 0; k < testRoutines; k += 1 {
+		wg.Add(1)
+		go func() {
+			for i := 0; i < N; i += 1 {
+				q.Enqueue(i)
+				q.Dequeue()
+			}
+			wg.Done()
+		}()
+	}
+	wg.Wait()
+	done <- 1
 }

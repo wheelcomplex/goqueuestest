@@ -5,22 +5,22 @@ Performance test of different queue implementations
 
 --
 
-Warning the implementations here will change and changes probably will break API!
+Warning: not for production use!
 
 -- 
 
 Available Structure:
 
-* Channel based fifo (NewChanFifo(size))
-* list.List based fifo using chan for locking (NewListCFifo)
-* list.List based lifo using chan for locking  (NewListCLifo)
-* list.List based fifo using mutex for locking (NewListFifo)
-* list.List based lifo using mutex for locking (NewListLifo)
-* lockfree lifo implementation  (NewZLifo) (broken, ABA problem)
-* lockfree fifo implementation (NewZFifo) (broken?)
-* lockfree fifo implementation using chan based freelist (NewZFifoFreechan)
-* lockfree fifo implementation using ring.Ring based freelist (NewZFifoFreering)
-* ring.Ring based lifo using mutex for locking (NewRLifo)
-* ring.Ring based fifo using mutex for locking (NewRFifo)
-* slice based lifo using mutex for locking (NewSLifo)
-* slice based fifo using mutex for locking (NewSFifo)
+* CFifo : Channel based fifo
+* LcLifo : list.List based lifo using chan for locking
+* LcFifo : list.List based fifo using chan for locking
+* LmLifo : list.List based lifo using mutex for locking
+* LmFifo : list.List based fifo using mutex for locking
+* ZLifo : lockfree lifo implementation (broken, ABA problem)
+* ZFifo : lockfree fifo implementation (broken?)
+* ZcFifo : lockfree fifo implementation using chan based freelist (broken)
+* ZrFifo : lockfree fifo implementation using ring.Ring based freelist (broken)
+* RmLifo : ring.Ring based lifo using mutex for locking
+* RmFifo : ring.Ring based fifo using mutex for locking
+* SmLifo : slice based lifo using mutex for locking
+* SmFifo : slice based fifo using mutex for locking

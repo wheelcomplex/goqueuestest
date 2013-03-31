@@ -7,11 +7,6 @@ import (
 
 // From https://github.com/anisus/queue/blob/master/queue.go
 
-type node_t struct {
-	value interface{}
-	next  unsafe.Pointer
-}
-
 type ZFifo struct {
 	head unsafe.Pointer
 	tail unsafe.Pointer
@@ -21,7 +16,7 @@ type ZFifo struct {
 func NewZFifo() *ZFifo {
 	q := new(ZFifo)
 	// Creating an initial node
-	node := unsafe.Pointer(&node_t{nil, unsafe.Pointer(q)})
+	node := unsafe.Pointer(&lfNode{nil, unsafe.Pointer(q)})
 
 	// Both head and tail point to the initial node
 	q.head = node
@@ -31,21 +26,21 @@ func NewZFifo() *ZFifo {
 
 // Enqueue inserts the value at the tail of the queue
 func (q *ZFifo) Enqueue(value interface{}) {
-	node := new(node_t) // Allocate a new node from the free list
+	node := new(lfNode) // Allocate a new node from the free list
 	node.value = value  // Copy enqueued value into node
 	node.next = unsafe.Pointer(q)
 	for { // Keep trying until Enqueue is done
 		tail := atomic.LoadPointer(&q.tail)
 
 		// Try to link in new node
-		if atomic.CompareAndSwapPointer(&(*node_t)(tail).next, unsafe.Pointer(q), unsafe.Pointer(node)) {
+		if atomic.CompareAndSwapPointer(&(*lfNode)(tail).next, unsafe.Pointer(q), unsafe.Pointer(node)) {
 			// Enqueue is done.  Try to swing tail to the inserted node.
 			atomic.CompareAndSwapPointer(&q.tail, tail, unsafe.Pointer(node))
 			return
 		}
 
 		// Try to swing tail to the next node as the tail was not pointing to the last node
-		atomic.CompareAndSwapPointer(&q.tail, tail, (*node_t)(tail).next)
+		atomic.CompareAndSwapPointer(&q.tail, tail, (*lfNode)(tail).next)
 	}
 }
 
@@ -54,7 +49,7 @@ func (q *ZFifo) Dequeue() (value interface{}, ok bool) {
 	for {
 		head := atomic.LoadPointer(&q.head)               // Read head pointer
 		tail := atomic.LoadPointer(&q.tail)               // Read tail pointer
-		next := atomic.LoadPointer(&(*node_t)(head).next) // Read head.next
+		next := atomic.LoadPointer(&(*lfNode)(head).next) // Read head.next
 		if head != q.head {                               // Check head, tail, and next consistency
 			continue // Not consistent. Try again
 		}
@@ -68,7 +63,7 @@ func (q *ZFifo) Dequeue() (value interface{}, ok bool) {
 		} else {
 			// Read value before CAS
 			// Otherwise, another dequeue might free the next node
-			value = (*node_t)(next).value
+			value = (*lfNode)(next).value
 			// Try to swing Head to the next node
 			if atomic.CompareAndSwapPointer(&q.head, head, next) {
 				ok = true

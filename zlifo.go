@@ -16,10 +16,10 @@ func NewZLifo() *ZLifo {
 }
 
 func (q *ZLifo) Enqueue(value interface{}) {
-	node := unsafe.Pointer(&Element{value, nil})
+	node := unsafe.Pointer(&lfNode{value, nil})
 	for {
-		(*Element)(node).Next = q.head
-		if atomic.CompareAndSwapPointer(&q.head, (*Element)(node).Next, node) {
+		(*lfNode)(node).next = q.head
+		if atomic.CompareAndSwapPointer(&q.head, (*lfNode)(node).next, node) {
 			break
 		}
 	}
@@ -28,8 +28,8 @@ func (q *ZLifo) Enqueue(value interface{}) {
 func (q *ZLifo) Dequeue() (value interface{}, ok bool) {
 	current := q.head
 	for current != nil {
-		if atomic.CompareAndSwapPointer(&q.head, current, (*Element)(current).Next) {
-			value = (*Element)(current).Value
+		if atomic.CompareAndSwapPointer(&q.head, current, (*lfNode)(current).next) {
+			value = (*lfNode)(current).value
 			return value, true
 		}
 		current = q.head

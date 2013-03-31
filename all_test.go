@@ -3,78 +3,6 @@ package goqueuestest
 import "testing"
 
 
-func TestLmLifo(t *testing.T) {
-	lifoTest(t, NewListLifo())
-	queuePTest(t, NewListLifo())
-	queueP2Test(t, NewListLifo())
-}
-
-func BenchmarkLmLifo(b *testing.B) {
-	queueBench(b, NewListLifo())
-}
-
-func BenchmarkLmLifoP(b *testing.B) {
-	queueBenchP(b, NewListLifo())
-}
-
-func BenchmarkLmLifoP2(b *testing.B) {
-	queueBenchP2(b, NewListLifo())
-}
-
-func TestRmLifo(t *testing.T) {
-	lifoTest(t, NewRLifo())
-	queuePTest(t, NewRLifo())
-	queueP2Test(t, NewRLifo())
-}
-
-func BenchmarkRmLifo(b *testing.B) {
-	queueBench(b, NewRLifo())
-}
-
-func BenchmarkRmLifoP(b *testing.B) {
-	queueBenchP(b, NewRLifo())
-}
-
-func BenchmarkRmLifoP2(b *testing.B) {
-	queueBenchP2(b, NewRLifo())
-}
-
-func TestRmFifo(t *testing.T) {
-	fifoTest(t, NewRFifo())
-	queuePTest(t, NewRFifo())
-	queueP2Test(t, NewRFifo())
-}
-
-func BenchmarkRmFifo(b *testing.B) {
-	queueBench(b, NewRFifo())
-}
-
-func BenchmarkRmFifoP(b *testing.B) {
-	queueBenchP(b, NewRFifo())
-}
-
-func BenchmarkRmFifoP2(b *testing.B) {
-	queueBenchP2(b, NewRFifo())
-}
-
-func TestSmLifo(t *testing.T) {
-	lifoTest(t, NewSLifo())
-	queuePTest(t, NewSLifo())
-	queueP2Test(t, NewSLifo())
-}
-
-func BenchmarkSmLifo(b *testing.B) {
-	queueBench(b, NewSLifo())
-}
-
-func BenchmarkSmLifoP(b *testing.B) {
-	queueBenchP(b, NewSLifo())
-}
-
-func BenchmarkSmLifoP2(b *testing.B) {
-	queueBenchP2(b, NewSLifo())
-}
-
 func TestCFifo(t *testing.T) {
 	fifoTest(t, NewChanFifo(testItemCount))
 	queuePTest(t, NewChanFifo(testItemCount))
@@ -127,6 +55,24 @@ func BenchmarkLcFifoP(b *testing.B) {
 
 func BenchmarkLcFifoP2(b *testing.B) {
 	queueBenchP2(b, NewListCFifo())
+}
+
+func TestLmLifo(t *testing.T) {
+	lifoTest(t, NewListLifo())
+	queuePTest(t, NewListLifo())
+	queueP2Test(t, NewListLifo())
+}
+
+func BenchmarkLmLifo(b *testing.B) {
+	queueBench(b, NewListLifo())
+}
+
+func BenchmarkLmLifoP(b *testing.B) {
+	queueBenchP(b, NewListLifo())
+}
+
+func BenchmarkLmLifoP2(b *testing.B) {
+	queueBenchP2(b, NewListLifo())
 }
 
 func TestLmFifo(t *testing.T) {
@@ -217,6 +163,60 @@ func BenchmarkZrFifoP(b *testing.B) {
 
 func BenchmarkZrFifoP2(b *testing.B) {
 	queueBenchP2(b, NewZFifoFreering())
+}
+
+func TestRmLifo(t *testing.T) {
+	lifoTest(t, NewRLifo())
+	queuePTest(t, NewRLifo())
+	queueP2Test(t, NewRLifo())
+}
+
+func BenchmarkRmLifo(b *testing.B) {
+	queueBench(b, NewRLifo())
+}
+
+func BenchmarkRmLifoP(b *testing.B) {
+	queueBenchP(b, NewRLifo())
+}
+
+func BenchmarkRmLifoP2(b *testing.B) {
+	queueBenchP2(b, NewRLifo())
+}
+
+func TestRmFifo(t *testing.T) {
+	fifoTest(t, NewRFifo())
+	queuePTest(t, NewRFifo())
+	queueP2Test(t, NewRFifo())
+}
+
+func BenchmarkRmFifo(b *testing.B) {
+	queueBench(b, NewRFifo())
+}
+
+func BenchmarkRmFifoP(b *testing.B) {
+	queueBenchP(b, NewRFifo())
+}
+
+func BenchmarkRmFifoP2(b *testing.B) {
+	queueBenchP2(b, NewRFifo())
+}
+
+func TestSmLifo(t *testing.T) {
+	lifoTest(t, NewSLifo())
+	queuePTest(t, NewSLifo())
+	queueP2Test(t, NewSLifo())
+}
+
+func BenchmarkSmLifo(b *testing.B) {
+	queueBench(b, NewSLifo())
+}
+
+func BenchmarkSmLifoP(b *testing.B) {
+	queueBenchP(b, NewSLifo())
+}
+
+func BenchmarkSmLifoP2(b *testing.B) {
+	queueBenchP2(b, NewSLifo())
 }
 
 func TestSmFifo(t *testing.T) {

@@ -1,0 +1,91 @@
+package main
+
+// +build ignore
+
+import (
+	"fmt"
+	"os"
+	"text/template"
+)
+
+const Header = `package goqueuestest
+// DO NOT EDIT, GENERATED CODE
+import "testing"
+
+`
+
+const tests = `
+func Test{{.Name}}(t *testing.T) {
+	{{.Type}}Test(t, {{.Ctor}}())
+	queuePTest(t, {{.Ctor}}())
+	queueP2Test(t, {{.Ctor}}())
+}
+
+func Benchmark{{.Name}}(b *testing.B) {
+	queueBench(b, {{.Ctor}}())
+}
+
+func Benchmark{{.Name}}P(b *testing.B) {
+	queueBenchP(b, {{.Ctor}}())
+}
+
+func Benchmark{{.Name}}P2(b *testing.B) {
+	queueBenchP2(b, {{.Ctor}}())
+}
+`
+
+const testsSized = `
+func Test{{.Name}}(t *testing.T) {
+	{{.Type}}Test(t, {{.Ctor}}(testItemCount))
+	queuePTest(t, {{.Ctor}}(testItemCount))
+	queueP2Test(t, {{.Ctor}}(testItemCount))
+}
+
+func Benchmark{{.Name}}S(b *testing.B) {
+	queueBench(b, {{.Ctor}}(b.N))
+}
+
+func Benchmark{{.Name}}P(b *testing.B) {
+	queueBenchP(b, {{.Ctor}}(b.N))
+}
+
+func Benchmark{{.Name}}P2(b *testing.B) {
+	queueBenchP2(b, {{.Ctor}}(b.N))
+}
+`
+
+type queue struct {
+	Name, Ctor, Type string
+	Sized            bool
+}
+
+var queues = []queue{
+	{"CFifo", "NewChanFifo", "fifo", true},
+	{"LcLifo", "NewListCLifo", "lifo", false},
+	{"LcFifo", "NewListCFifo", "fifo", false},
+	{"LmLifo", "NewListLifo", "lifo", false},
+	{"LmFifo", "NewListFifo", "fifo", false},
+	{"ZLifo", "NewZLifo", "lifo", false},
+	{"ZFifo", "NewZFifo", "fifo", false},
+	{"ZcFifo", "NewZFifoFreechan", "fifo", false},
+	{"ZrFifo", "NewZFifoFreering", "fifo", false},
+	{"RmLifo", "NewRLifo", "lifo", false},
+	{"RmFifo", "NewRFifo", "fifo", false},
+	{"SmLifo", "NewSLifo", "lifo", false},
+	{"SmFifo", "NewSFifo", "fifo", false},
+}
+
+func main() {
+	simple := template.Must(template.New("simple").Parse(tests))
+	sized := template.Must(template.New("sized").Parse(testsSized))
+
+	fmt.Printf(Header)
+	for _, q := range queues {
+		t := simple
+		if q.Sized {
+			t = sized
+		}
+
+		t.Execute(os.Stdout, q)
+	}
+}

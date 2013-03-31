@@ -14,4 +14,4 @@ type Element struct {
 	Next  unsafe.Pointer
 }
 
-const growBy = 1000
+const growBy = 10

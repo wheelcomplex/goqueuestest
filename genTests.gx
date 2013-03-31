@@ -9,7 +9,7 @@ import (
 )
 
 const Header = `package goqueuestest
-
+// DO NOT EDIT, GENERATED CODE
 import "testing"
 
 `

@@ -2,7 +2,7 @@
 package goqueuestest
 
 type ScLifo struct {
-	l []interface{}
+	l    []interface{}
 	last int
 	lock chan int
 }
@@ -36,11 +36,11 @@ func (q *ScLifo) Dequeue() (interface{}, bool) {
 }
 
 type ScFifo struct {
-	l []interface{}
-	tail int
-	head int
+	l      []interface{}
+	tail   int
+	head   int
 	length int
-	lock chan int
+	lock   chan int
 }
 
 func NewScFifo() *ScFifo {

@@ -128,7 +128,6 @@ func queueP2Test(t *testing.T, q Queue) {
 	done <- 1
 }
 
-
 func queueBenchSing(b *testing.B, q Queue) {
 	for i := 0; i < b.N; i += 1 {
 		q.Enqueue(i)
@@ -156,7 +155,6 @@ func queueBenchANRN(b *testing.B, q Queue) {
 	}
 	wg.Wait()
 }
-
 
 func queueBenchA1R1(b *testing.B, q Queue) {
 	testRoutines := runtime.GOMAXPROCS(-1)

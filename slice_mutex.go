@@ -6,9 +6,9 @@ import (
 )
 
 type SmLifo struct {
-	l []interface{}
+	l    []interface{}
 	last int
-	m sync.Mutex
+	m    sync.Mutex
 }
 
 func NewSmLifo() *SmLifo {
@@ -38,11 +38,11 @@ func (q *SmLifo) Dequeue() (interface{}, bool) {
 }
 
 type SmFifo struct {
-	l []interface{}
-	tail int
-	head int
+	l      []interface{}
+	tail   int
+	head   int
 	length int
-	m sync.Mutex
+	m      sync.Mutex
 }
 
 func NewSmFifo() *SmFifo {

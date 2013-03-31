@@ -76,20 +76,22 @@ type queue struct {
 
 var queues = []queue{
 	{"CFifo", "NewChanFifo", "fifo", true},
-	{"LcLifo", "NewListCLifo", "lifo", false},
-	{"LcFifo", "NewListCFifo", "fifo", false},
-	{"LmLifo", "NewListLifo", "lifo", false},
-	{"LmFifo", "NewListFifo", "fifo", false},
 	{"ZLifo", "NewZLifo", "lifo", false},
 	{"ZFifo", "NewZFifo", "fifo", false},
 	{"ZcFifo", "NewZFifoFreechan", "fifo", false},
 	{"ZrFifo", "NewZFifoFreering", "fifo", false},
-	{"RmLifo", "NewRLifo", "lifo", false},
-	{"RmFifo", "NewRFifo", "fifo", false},
-	{"SmLifo", "NewSmLifo", "lifo", false},
-	{"SmFifo", "NewSmFifo", "fifo", false},
 	{"ScLifo", "NewScLifo", "lifo", false},
 	{"ScFifo", "NewScFifo", "fifo", false},
+	{"SmLifo", "NewSmLifo", "lifo", false},
+	{"SmFifo", "NewSmFifo", "fifo", false},
+	{"RcLifo", "NewRcLifo", "lifo", false},
+	{"RcFifo", "NewRcFifo", "fifo", false},
+	{"RmLifo", "NewRmLifo", "lifo", false},
+	{"RmFifo", "NewRmFifo", "fifo", false},
+	{"LcLifo", "NewListCLifo", "lifo", false},
+	{"LcFifo", "NewListCFifo", "fifo", false},
+	{"LmLifo", "NewListLifo", "lifo", false},
+	{"LmFifo", "NewListFifo", "fifo", false},
 }
 
 func main() {

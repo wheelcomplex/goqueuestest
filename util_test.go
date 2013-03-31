@@ -129,7 +129,7 @@ func queueP2Test(t *testing.T, q Queue) {
 }
 
 
-func queueBench(b *testing.B, q Queue) {
+func queueBenchSing(b *testing.B, q Queue) {
 	for i := 0; i < b.N; i += 1 {
 		q.Enqueue(i)
 	}
@@ -138,7 +138,7 @@ func queueBench(b *testing.B, q Queue) {
 	}
 }
 
-func queueBenchP(b *testing.B, q Queue) {
+func queueBenchANRN(b *testing.B, q Queue) {
 	testRoutines := runtime.GOMAXPROCS(-1)
 	N := b.N / testRoutines
 	wg := &sync.WaitGroup{}
@@ -158,7 +158,7 @@ func queueBenchP(b *testing.B, q Queue) {
 }
 
 
-func queueBenchP2(b *testing.B, q Queue) {
+func queueBenchA1R1(b *testing.B, q Queue) {
 	testRoutines := runtime.GOMAXPROCS(-1)
 	N := b.N / testRoutines
 	wg := &sync.WaitGroup{}
@@ -167,6 +167,50 @@ func queueBenchP2(b *testing.B, q Queue) {
 		go func() {
 			for i := 0; i < N; i += 1 {
 				q.Enqueue(i)
+				q.Dequeue()
+			}
+			wg.Done()
+		}()
+	}
+	wg.Wait()
+}
+
+func queueBenchA2R1(b *testing.B, q Queue) {
+	testRoutines := runtime.GOMAXPROCS(-1)
+	N := b.N / testRoutines
+	N = N / 2
+	wg := &sync.WaitGroup{}
+	for k := 0; k < testRoutines; k += 1 {
+		wg.Add(1)
+		go func() {
+			for i := 0; i < N; i += 1 {
+				q.Enqueue(i)
+				q.Enqueue(i)
+				q.Dequeue()
+			}
+			for i := 0; i < N; i += 1 {
+				q.Dequeue()
+			}
+			wg.Done()
+		}()
+	}
+	wg.Wait()
+}
+
+func queueBenchA1R2(b *testing.B, q Queue) {
+	testRoutines := runtime.GOMAXPROCS(-1)
+	N := b.N / testRoutines
+	N = N / 2
+	wg := &sync.WaitGroup{}
+	for k := 0; k < testRoutines; k += 1 {
+		wg.Add(1)
+		go func() {
+			for i := 0; i < N; i += 1 {
+				q.Enqueue(i)
+			}
+			for i := 0; i < N; i += 1 {
+				q.Enqueue(i)
+				q.Dequeue()
 				q.Dequeue()
 			}
 			wg.Done()

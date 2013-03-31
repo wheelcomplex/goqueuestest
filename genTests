@@ -21,16 +21,23 @@ func Test{{.Name}}(t *testing.T) {
 	queueP2Test(t, {{.Ctor}}())
 }
 
-func Benchmark{{.Name}}(b *testing.B) {
-	queueBench(b, {{.Ctor}}())
+func Benchmark{{.Name}}Sing(b *testing.B) {
+	queueBenchSing(b, {{.Ctor}}())
 }
 
-func Benchmark{{.Name}}P(b *testing.B) {
-	queueBenchP(b, {{.Ctor}}())
+func Benchmark{{.Name}}ANRN(b *testing.B) {
+	queueBenchANRN(b, {{.Ctor}}())
 }
 
-func Benchmark{{.Name}}P2(b *testing.B) {
-	queueBenchP2(b, {{.Ctor}}())
+func Benchmark{{.Name}}A1R1(b *testing.B) {
+	queueBenchA1R1(b, {{.Ctor}}())
+}
+
+func Benchmark{{.Name}}A2R1(b *testing.B) {
+	queueBenchA2R1(b, {{.Ctor}}())
+}
+func Benchmark{{.Name}}A1R2(b *testing.B) {
+	queueBenchA1R2(b, {{.Ctor}}())
 }
 `
 
@@ -41,16 +48,24 @@ func Test{{.Name}}(t *testing.T) {
 	queueP2Test(t, {{.Ctor}}(testItemCount))
 }
 
-func Benchmark{{.Name}}S(b *testing.B) {
-	queueBench(b, {{.Ctor}}(b.N))
+func Benchmark{{.Name}}Sing(b *testing.B) {
+	queueBenchSing(b, {{.Ctor}}(b.N))
 }
 
-func Benchmark{{.Name}}P(b *testing.B) {
-	queueBenchP(b, {{.Ctor}}(b.N))
+func Benchmark{{.Name}}ANRN(b *testing.B) {
+	queueBenchANRN(b, {{.Ctor}}(b.N))
 }
 
-func Benchmark{{.Name}}P2(b *testing.B) {
-	queueBenchP2(b, {{.Ctor}}(b.N))
+func Benchmark{{.Name}}A1R1(b *testing.B) {
+	queueBenchA1R1(b, {{.Ctor}}(b.N))
+}
+
+func Benchmark{{.Name}}A2R1(b *testing.B) {
+	queueBenchA2R1(b, {{.Ctor}}(b.N))
+}
+
+func Benchmark{{.Name}}A1R2(b *testing.B) {
+	queueBenchA1R2(b, {{.Ctor}}(b.N))
 }
 `
 

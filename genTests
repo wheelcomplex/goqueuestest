@@ -86,8 +86,10 @@ var queues = []queue{
 	{"ZrFifo", "NewZFifoFreering", "fifo", false},
 	{"RmLifo", "NewRLifo", "lifo", false},
 	{"RmFifo", "NewRFifo", "fifo", false},
-	{"SmLifo", "NewSLifo", "lifo", false},
-	{"SmFifo", "NewSFifo", "fifo", false},
+	{"SmLifo", "NewSmLifo", "lifo", false},
+	{"SmFifo", "NewSmFifo", "fifo", false},
+	{"ScLifo", "NewScLifo", "lifo", false},
+	{"ScFifo", "NewScFifo", "fifo", false},
 }
 
 func main() {

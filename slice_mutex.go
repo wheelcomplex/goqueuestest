@@ -57,11 +57,8 @@ func NewSFifo() *SFifo {
 func (q *SFifo) Enqueue(value interface{}) {
 	q.m.Lock()
 	if q.length >= len(q.l) {
-		nl := make([]interface{}, len(q.l) + growBy)
-		tLen := q.length - q.tail
-		copy(nl, q.l[q.tail:])
-		copy(nl[tLen:], q.l[:q.head])
-		q.l = nl
+		//nl := make([]interface{}, len(q.l) + growBy)
+		q.l = append(q.l[q.tail:], q.l[:q.head], make([]interface{}, growBy)...)
 		q.tail = 0
 		q.head = q.length
 	}

@@ -354,3 +354,131 @@ func BenchmarkRmFifo_A2R1x5(b *testing.B) { runParallelBench(b, 5, NewRmFifo(), 
 func BenchmarkRmFifo_A2R1x10(b *testing.B) { runParallelBench(b, 10, NewRmFifo(), benchA2R1)}
 func BenchmarkRmFifo_A2R1x50(b *testing.B) { runParallelBench(b, 50, NewRmFifo(), benchA2R1)}
 func BenchmarkRmFifo_A2R1x100(b *testing.B) { runParallelBench(b, 100, NewRmFifo(), benchA2R1)}
+
+// PcLifo
+
+func TestPcLifo(t *testing.T) {
+	lifoTest(t, NewPcLifo())
+	queuePTest(t, NewPcLifo())
+	queueP2Test(t, NewPcLifo())
+}
+func BenchmarkPcLifo_ANRNx1(b *testing.B) { runParallelBench(b, 1, NewPcLifo(), benchANRN)}
+func BenchmarkPcLifo_ANRNx3(b *testing.B) { runParallelBench(b, 3, NewPcLifo(), benchANRN)}
+func BenchmarkPcLifo_ANRNx5(b *testing.B) { runParallelBench(b, 5, NewPcLifo(), benchANRN)}
+func BenchmarkPcLifo_ANRNx10(b *testing.B) { runParallelBench(b, 10, NewPcLifo(), benchANRN)}
+func BenchmarkPcLifo_ANRNx50(b *testing.B) { runParallelBench(b, 50, NewPcLifo(), benchANRN)}
+func BenchmarkPcLifo_ANRNx100(b *testing.B) { runParallelBench(b, 100, NewPcLifo(), benchANRN)}
+func BenchmarkPcLifo_A1R1x1(b *testing.B) { runParallelBench(b, 1, NewPcLifo(), benchA1R1)}
+func BenchmarkPcLifo_A1R1x3(b *testing.B) { runParallelBench(b, 3, NewPcLifo(), benchA1R1)}
+func BenchmarkPcLifo_A1R1x5(b *testing.B) { runParallelBench(b, 5, NewPcLifo(), benchA1R1)}
+func BenchmarkPcLifo_A1R1x10(b *testing.B) { runParallelBench(b, 10, NewPcLifo(), benchA1R1)}
+func BenchmarkPcLifo_A1R1x50(b *testing.B) { runParallelBench(b, 50, NewPcLifo(), benchA1R1)}
+func BenchmarkPcLifo_A1R1x100(b *testing.B) { runParallelBench(b, 100, NewPcLifo(), benchA1R1)}
+func BenchmarkPcLifo_A1R2x1(b *testing.B) { runParallelBench(b, 1, NewPcLifo(), benchA1R2)}
+func BenchmarkPcLifo_A1R2x3(b *testing.B) { runParallelBench(b, 3, NewPcLifo(), benchA1R2)}
+func BenchmarkPcLifo_A1R2x5(b *testing.B) { runParallelBench(b, 5, NewPcLifo(), benchA1R2)}
+func BenchmarkPcLifo_A1R2x10(b *testing.B) { runParallelBench(b, 10, NewPcLifo(), benchA1R2)}
+func BenchmarkPcLifo_A1R2x50(b *testing.B) { runParallelBench(b, 50, NewPcLifo(), benchA1R2)}
+func BenchmarkPcLifo_A1R2x100(b *testing.B) { runParallelBench(b, 100, NewPcLifo(), benchA1R2)}
+func BenchmarkPcLifo_A2R1x1(b *testing.B) { runParallelBench(b, 1, NewPcLifo(), benchA2R1)}
+func BenchmarkPcLifo_A2R1x3(b *testing.B) { runParallelBench(b, 3, NewPcLifo(), benchA2R1)}
+func BenchmarkPcLifo_A2R1x5(b *testing.B) { runParallelBench(b, 5, NewPcLifo(), benchA2R1)}
+func BenchmarkPcLifo_A2R1x10(b *testing.B) { runParallelBench(b, 10, NewPcLifo(), benchA2R1)}
+func BenchmarkPcLifo_A2R1x50(b *testing.B) { runParallelBench(b, 50, NewPcLifo(), benchA2R1)}
+func BenchmarkPcLifo_A2R1x100(b *testing.B) { runParallelBench(b, 100, NewPcLifo(), benchA2R1)}
+
+// PcFifo
+
+func TestPcFifo(t *testing.T) {
+	fifoTest(t, NewPcFifo())
+	queuePTest(t, NewPcFifo())
+	queueP2Test(t, NewPcFifo())
+}
+func BenchmarkPcFifo_ANRNx1(b *testing.B) { runParallelBench(b, 1, NewPcFifo(), benchANRN)}
+func BenchmarkPcFifo_ANRNx3(b *testing.B) { runParallelBench(b, 3, NewPcFifo(), benchANRN)}
+func BenchmarkPcFifo_ANRNx5(b *testing.B) { runParallelBench(b, 5, NewPcFifo(), benchANRN)}
+func BenchmarkPcFifo_ANRNx10(b *testing.B) { runParallelBench(b, 10, NewPcFifo(), benchANRN)}
+func BenchmarkPcFifo_ANRNx50(b *testing.B) { runParallelBench(b, 50, NewPcFifo(), benchANRN)}
+func BenchmarkPcFifo_ANRNx100(b *testing.B) { runParallelBench(b, 100, NewPcFifo(), benchANRN)}
+func BenchmarkPcFifo_A1R1x1(b *testing.B) { runParallelBench(b, 1, NewPcFifo(), benchA1R1)}
+func BenchmarkPcFifo_A1R1x3(b *testing.B) { runParallelBench(b, 3, NewPcFifo(), benchA1R1)}
+func BenchmarkPcFifo_A1R1x5(b *testing.B) { runParallelBench(b, 5, NewPcFifo(), benchA1R1)}
+func BenchmarkPcFifo_A1R1x10(b *testing.B) { runParallelBench(b, 10, NewPcFifo(), benchA1R1)}
+func BenchmarkPcFifo_A1R1x50(b *testing.B) { runParallelBench(b, 50, NewPcFifo(), benchA1R1)}
+func BenchmarkPcFifo_A1R1x100(b *testing.B) { runParallelBench(b, 100, NewPcFifo(), benchA1R1)}
+func BenchmarkPcFifo_A1R2x1(b *testing.B) { runParallelBench(b, 1, NewPcFifo(), benchA1R2)}
+func BenchmarkPcFifo_A1R2x3(b *testing.B) { runParallelBench(b, 3, NewPcFifo(), benchA1R2)}
+func BenchmarkPcFifo_A1R2x5(b *testing.B) { runParallelBench(b, 5, NewPcFifo(), benchA1R2)}
+func BenchmarkPcFifo_A1R2x10(b *testing.B) { runParallelBench(b, 10, NewPcFifo(), benchA1R2)}
+func BenchmarkPcFifo_A1R2x50(b *testing.B) { runParallelBench(b, 50, NewPcFifo(), benchA1R2)}
+func BenchmarkPcFifo_A1R2x100(b *testing.B) { runParallelBench(b, 100, NewPcFifo(), benchA1R2)}
+func BenchmarkPcFifo_A2R1x1(b *testing.B) { runParallelBench(b, 1, NewPcFifo(), benchA2R1)}
+func BenchmarkPcFifo_A2R1x3(b *testing.B) { runParallelBench(b, 3, NewPcFifo(), benchA2R1)}
+func BenchmarkPcFifo_A2R1x5(b *testing.B) { runParallelBench(b, 5, NewPcFifo(), benchA2R1)}
+func BenchmarkPcFifo_A2R1x10(b *testing.B) { runParallelBench(b, 10, NewPcFifo(), benchA2R1)}
+func BenchmarkPcFifo_A2R1x50(b *testing.B) { runParallelBench(b, 50, NewPcFifo(), benchA2R1)}
+func BenchmarkPcFifo_A2R1x100(b *testing.B) { runParallelBench(b, 100, NewPcFifo(), benchA2R1)}
+
+// PmLifo
+
+func TestPmLifo(t *testing.T) {
+	lifoTest(t, NewPmLifo())
+	queuePTest(t, NewPmLifo())
+	queueP2Test(t, NewPmLifo())
+}
+func BenchmarkPmLifo_ANRNx1(b *testing.B) { runParallelBench(b, 1, NewPmLifo(), benchANRN)}
+func BenchmarkPmLifo_ANRNx3(b *testing.B) { runParallelBench(b, 3, NewPmLifo(), benchANRN)}
+func BenchmarkPmLifo_ANRNx5(b *testing.B) { runParallelBench(b, 5, NewPmLifo(), benchANRN)}
+func BenchmarkPmLifo_ANRNx10(b *testing.B) { runParallelBench(b, 10, NewPmLifo(), benchANRN)}
+func BenchmarkPmLifo_ANRNx50(b *testing.B) { runParallelBench(b, 50, NewPmLifo(), benchANRN)}
+func BenchmarkPmLifo_ANRNx100(b *testing.B) { runParallelBench(b, 100, NewPmLifo(), benchANRN)}
+func BenchmarkPmLifo_A1R1x1(b *testing.B) { runParallelBench(b, 1, NewPmLifo(), benchA1R1)}
+func BenchmarkPmLifo_A1R1x3(b *testing.B) { runParallelBench(b, 3, NewPmLifo(), benchA1R1)}
+func BenchmarkPmLifo_A1R1x5(b *testing.B) { runParallelBench(b, 5, NewPmLifo(), benchA1R1)}
+func BenchmarkPmLifo_A1R1x10(b *testing.B) { runParallelBench(b, 10, NewPmLifo(), benchA1R1)}
+func BenchmarkPmLifo_A1R1x50(b *testing.B) { runParallelBench(b, 50, NewPmLifo(), benchA1R1)}
+func BenchmarkPmLifo_A1R1x100(b *testing.B) { runParallelBench(b, 100, NewPmLifo(), benchA1R1)}
+func BenchmarkPmLifo_A1R2x1(b *testing.B) { runParallelBench(b, 1, NewPmLifo(), benchA1R2)}
+func BenchmarkPmLifo_A1R2x3(b *testing.B) { runParallelBench(b, 3, NewPmLifo(), benchA1R2)}
+func BenchmarkPmLifo_A1R2x5(b *testing.B) { runParallelBench(b, 5, NewPmLifo(), benchA1R2)}
+func BenchmarkPmLifo_A1R2x10(b *testing.B) { runParallelBench(b, 10, NewPmLifo(), benchA1R2)}
+func BenchmarkPmLifo_A1R2x50(b *testing.B) { runParallelBench(b, 50, NewPmLifo(), benchA1R2)}
+func BenchmarkPmLifo_A1R2x100(b *testing.B) { runParallelBench(b, 100, NewPmLifo(), benchA1R2)}
+func BenchmarkPmLifo_A2R1x1(b *testing.B) { runParallelBench(b, 1, NewPmLifo(), benchA2R1)}
+func BenchmarkPmLifo_A2R1x3(b *testing.B) { runParallelBench(b, 3, NewPmLifo(), benchA2R1)}
+func BenchmarkPmLifo_A2R1x5(b *testing.B) { runParallelBench(b, 5, NewPmLifo(), benchA2R1)}
+func BenchmarkPmLifo_A2R1x10(b *testing.B) { runParallelBench(b, 10, NewPmLifo(), benchA2R1)}
+func BenchmarkPmLifo_A2R1x50(b *testing.B) { runParallelBench(b, 50, NewPmLifo(), benchA2R1)}
+func BenchmarkPmLifo_A2R1x100(b *testing.B) { runParallelBench(b, 100, NewPmLifo(), benchA2R1)}
+
+// PmFifo
+
+func TestPmFifo(t *testing.T) {
+	fifoTest(t, NewPmFifo())
+	queuePTest(t, NewPmFifo())
+	queueP2Test(t, NewPmFifo())
+}
+func BenchmarkPmFifo_ANRNx1(b *testing.B) { runParallelBench(b, 1, NewPmFifo(), benchANRN)}
+func BenchmarkPmFifo_ANRNx3(b *testing.B) { runParallelBench(b, 3, NewPmFifo(), benchANRN)}
+func BenchmarkPmFifo_ANRNx5(b *testing.B) { runParallelBench(b, 5, NewPmFifo(), benchANRN)}
+func BenchmarkPmFifo_ANRNx10(b *testing.B) { runParallelBench(b, 10, NewPmFifo(), benchANRN)}
+func BenchmarkPmFifo_ANRNx50(b *testing.B) { runParallelBench(b, 50, NewPmFifo(), benchANRN)}
+func BenchmarkPmFifo_ANRNx100(b *testing.B) { runParallelBench(b, 100, NewPmFifo(), benchANRN)}
+func BenchmarkPmFifo_A1R1x1(b *testing.B) { runParallelBench(b, 1, NewPmFifo(), benchA1R1)}
+func BenchmarkPmFifo_A1R1x3(b *testing.B) { runParallelBench(b, 3, NewPmFifo(), benchA1R1)}
+func BenchmarkPmFifo_A1R1x5(b *testing.B) { runParallelBench(b, 5, NewPmFifo(), benchA1R1)}
+func BenchmarkPmFifo_A1R1x10(b *testing.B) { runParallelBench(b, 10, NewPmFifo(), benchA1R1)}
+func BenchmarkPmFifo_A1R1x50(b *testing.B) { runParallelBench(b, 50, NewPmFifo(), benchA1R1)}
+func BenchmarkPmFifo_A1R1x100(b *testing.B) { runParallelBench(b, 100, NewPmFifo(), benchA1R1)}
+func BenchmarkPmFifo_A1R2x1(b *testing.B) { runParallelBench(b, 1, NewPmFifo(), benchA1R2)}
+func BenchmarkPmFifo_A1R2x3(b *testing.B) { runParallelBench(b, 3, NewPmFifo(), benchA1R2)}
+func BenchmarkPmFifo_A1R2x5(b *testing.B) { runParallelBench(b, 5, NewPmFifo(), benchA1R2)}
+func BenchmarkPmFifo_A1R2x10(b *testing.B) { runParallelBench(b, 10, NewPmFifo(), benchA1R2)}
+func BenchmarkPmFifo_A1R2x50(b *testing.B) { runParallelBench(b, 50, NewPmFifo(), benchA1R2)}
+func BenchmarkPmFifo_A1R2x100(b *testing.B) { runParallelBench(b, 100, NewPmFifo(), benchA1R2)}
+func BenchmarkPmFifo_A2R1x1(b *testing.B) { runParallelBench(b, 1, NewPmFifo(), benchA2R1)}
+func BenchmarkPmFifo_A2R1x3(b *testing.B) { runParallelBench(b, 3, NewPmFifo(), benchA2R1)}
+func BenchmarkPmFifo_A2R1x5(b *testing.B) { runParallelBench(b, 5, NewPmFifo(), benchA2R1)}
+func BenchmarkPmFifo_A2R1x10(b *testing.B) { runParallelBench(b, 10, NewPmFifo(), benchA2R1)}
+func BenchmarkPmFifo_A2R1x50(b *testing.B) { runParallelBench(b, 50, NewPmFifo(), benchA2R1)}
+func BenchmarkPmFifo_A2R1x100(b *testing.B) { runParallelBench(b, 100, NewPmFifo(), benchA2R1)}

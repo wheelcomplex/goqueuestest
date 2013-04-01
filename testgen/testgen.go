@@ -49,6 +49,8 @@ var queues = []queue{
 	{"RmFifo", "NewRmFifo()", "fifo"},
 	{"PcLifo", "NewPcLifo()", "lifo"},
 	{"PcFifo", "NewPcFifo()", "fifo"},
+	{"PmLifo", "NewPmLifo()", "lifo"},
+	{"PmFifo", "NewPmFifo()", "fifo"},
 	//{"LcLifo", "NewListCLifo()", "lifo"},
 	//{"LcFifo", "NewListCFifo()", "fifo"},
 	//{"LmLifo", "NewListLifo()", "lifo"},
